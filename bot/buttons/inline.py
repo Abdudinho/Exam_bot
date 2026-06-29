@@ -1,21 +1,15 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram import F
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-week_menu = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [InlineKeyboardButton(text="Kiyimlar", callback_data="clothes")],
-        [InlineKeyboardButton(text="Elektronika", callback_data="Gadgets")],
-        [InlineKeyboardButton(text="Oziq-ovqat", callback_data="Food")],
-    ]
-)
+from bot.buttons.reply import products_menu, main_menu
+from bot.dispetcher import dp
 
-def pagination(page, max_page):
-    ikb = InlineKeyboardBuilder()
-    buttons = []
-    if page > 0:
-        buttons.append(InlineKeyboardButton(text='Prev', callback_data=f"page_{page-1}"))
-    if page < max_page - 1:
-        buttons.append(InlineKeyboardButton(text='Next', callback_data=f"page_{page+1}"))
-    ikb.add(*buttons)
-    ikb.adjust(2)
-    return ikb.as_markup()
+@dp.callback_query(F.data == "back_main")
+async def back_main(call: CallbackQuery):
+    await call.message.edit_text("Kerakli bo'limni tanlang:", reply_markup=main_menu())
+
+@dp.callback_query(F.data == "back_products")
+async def back_products(call: CallbackQuery):
+    await call.message.edit_text("Mahsulotlar bo'limini tanlang:", reply_markup=products_menu())
+
