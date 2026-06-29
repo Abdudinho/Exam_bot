@@ -11,11 +11,7 @@ services:
       - "5434:5432"
     volumes:
       - pg_data:/var/lib/postgresql
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+
 
   bot:
     build:
@@ -24,11 +20,8 @@ services:
     image: exam_bot:alpine
     container_name: exam_bot_con
     restart: always
-    env_file:
-      - .env
-    depends_on:
-      db:
-        condition: service_healthy
+
+
 
   web:
     build:
@@ -37,13 +30,9 @@ services:
     image: exam_web:alpine
     container_name: exam_web_con
     restart: always
-    env_file:
-      - .env
     ports:
       - "8000:8000"
-    depends_on:
-      db:
-        condition: service_healthy
+
 
 volumes:
   pg_data:
