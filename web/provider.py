@@ -4,7 +4,7 @@ from starlette.responses import Response
 from starlette_admin.auth import AdminConfig, AdminUser, AuthProvider
 from starlette_admin.exceptions import FormValidationError, LoginFailed
 
-from env_data import Env
+from bot.env_data import Env, WebEnv
 
 conf = Env
 
@@ -23,7 +23,7 @@ class UsernameAndPasswordProvider(AuthProvider):
                 {"username": "Ensure username has at least 03 characters"}
             )
 
-        if username == conf.web.ADMIN_NAME and bcrypt.checkpw(password.encode() , conf.web.ADMIN_PASSWORD.encode()):
+        if username == WebEnv.ADMIN_NAME and bcrypt.checkpw(password.encode() , WebEnv.ADMIN_PASSWORD.encode()):
             """Save `username` in session"""
             request.session.update({"username": username})
             return response
@@ -31,7 +31,7 @@ class UsernameAndPasswordProvider(AuthProvider):
         raise LoginFailed("Invalid username or password")
 
     async def is_authenticated(self, request) -> bool:
-        if request.session.get("username", None) == conf.web.ADMIN_NAME:
+        if request.session.get("username", None) == WebEnv.ADMIN_NAME:
             username = request.session["username"]
             request.state.user = username
             return True
