@@ -4,7 +4,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.utils.i18n import I18n, FSMI18nMiddleware
 from bot.dispetcher import dp, TOKEN
-import bot.handler.main  # noqa: F401  -- handlerlarni (start, callback'lar) ro'yxatdan o'tkazish uchun import qilinadi
+import bot.handler.main
 
 
 async def main() -> None:
